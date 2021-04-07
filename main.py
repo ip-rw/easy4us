@@ -161,11 +161,10 @@ if __name__ == '__main__':
             other = []
             for f in filenames:
                 csrc = os.path.join(dir, f)
-                if f.endswith(".php"):
-                    if b"ionCube Loader" in open(csrc, "rb").read():
-                        phpfiles.append(f)
-                    else:
-                        other.append(f)
+                if f.endswith(".php") and b"ionCube Loader" in open(csrc, "rb").read():
+                    phpfiles.append(f)
+                else:
+                    other.append(f)
 
             copy(dir, dest, other)
 
