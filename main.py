@@ -7,13 +7,13 @@ from io import BytesIO
 import requests
 import bs4
 
-parser = argparse.ArgumentParser(usage="easy2us", description="decode directories using easytoyou.eu")
+parser = argparse.ArgumentParser(usage="easy4us", description="decode directories with easytoyou.eu")
 parser.add_argument("-u", "--username", required=True, help="easytoyou.eu username")
 parser.add_argument("-p", "--password", required=True, help="easytoyou.eu password")
 parser.add_argument("-s", "--source", required=True, help="source directory")
-parser.add_argument("-d", "--decoder", help="decoder", default="ic10php72")
-parser.add_argument("-w", "--overwrite", help="overwrite", default=False)
-parser.add_argument("-o", "--destination", help="destination directory", default="")
+parser.add_argument("-o", "--destination", required=True, help="destination directory", default="")
+parser.add_argument("-d", "--decoder", required=True, help="decoder (default: ic10php72)", default="ic10php72")
+parser.add_argument("-w", "--overwrite", help="overwrite", action='store_true', default=False)
 base_url = "https://easytoyou.eu"
 args = parser.parse_args()
 
