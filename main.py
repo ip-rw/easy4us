@@ -12,7 +12,7 @@ parser.add_argument("-u", "--username", required=True, help="easytoyou.eu userna
 parser.add_argument("-p", "--password", required=True, help="easytoyou.eu password")
 parser.add_argument("-s", "--source", required=True, help="source directory")
 parser.add_argument("-o", "--destination", required=True, help="destination directory", default="")
-parser.add_argument("-d", "--decoder", required=True, help="decoder (default: ic10php72)", default="ic10php72")
+parser.add_argument("-d", "--decoder", help="decoder (default: ic10php72)", default="ic10php72")
 parser.add_argument("-w", "--overwrite", help="overwrite", action='store_true', default=False)
 base_url = "https://easytoyou.eu"
 args = parser.parse_args()
@@ -22,6 +22,7 @@ headers = {"Connection": "close",
            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.30 Safari/537.36",
            "Origin": "https://easytoyou.eu"}
 
+not_decoded = []
 
 def login(username, password):
     session = requests.session()
@@ -115,11 +116,37 @@ def download_zip(session, outpath):
         print(e)
         return False
 
+def batch(iterable, n=1):
+    l = len(iterable)
+    for ndx in range(0, l, n):
+        yield iterable[ndx:min(ndx + n, l)]
+
+
+def process_files(session, dir, dest, phpfiles):
+    print("uploading %d files..." % len(phpfiles), end='', flush=True)
+    res = upload(session, dir, phpfiles)
+    if res:
+        success, failure = res
+        print("done.")
+        copy(dir, dest, failure)
+        not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
+        # download zip
+        if len(success) > 0:
+            if not download_zip(session, dest):
+                print("download failed. refreshing session...", end='')
+                session = login(args.username, args.password)
+                print("done")
+                if not download_zip(session, dest):
+                    print("still couldn't download. copying originals and continuing")
+                    # copy(dir, dest, phpfiles)
+                    not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
+            clear(session)
+
 
 if __name__ == '__main__':
     if args.destination == "":
         args.destination = os.path.basename(args.source) + "_decoded"
-    not_decoded = []
+
     session = login(args.username, args.password)
     if session:
         clear(session)
@@ -155,22 +182,8 @@ if __name__ == '__main__':
 
             # upload
             if len(phpfiles) > 0:
-                print("uploading %d files..." % len(phpfiles), end='', flush=True)
-                success, failure = upload(session, dir, phpfiles)
-                print("done.")
-                copy(dir, dest, failure)
-                not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
-                # download zip
-                if len(success) > 0:
-                    if not download_zip(session, dest):
-                        print("download failed. refreshing session...", end='')
-                        session = login(args.username, args.password)
-                        print("done")
-                        if not download_zip(session, dest):
-                            print("still couldn't download. copying originals and continuing")
-                            copy(dir, dest, phpfiles)
-                            not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
-                    clear(session)
+                for f in batch(phpfiles, 25):
+                    process_files(session, dir, dest, f)
         print("finished. ioncube files that failed to decode:")
         for f in not_decoded:
             print(f)
