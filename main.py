@@ -24,6 +24,7 @@ headers = {"Connection": "close",
 
 not_decoded = []
 
+
 def login(username, password):
     session = requests.session()
     login = base_url + "/login"
@@ -70,7 +71,6 @@ def parse_upload_result(r):
         # print(el.text)
         res = [s.strip() for s in el.text.split()]
         failure.append(res[3])
-
     return success, failure
 
 
@@ -116,6 +116,7 @@ def download_zip(session, outpath):
         print(e)
         return False
 
+
 def batch(iterable, n=1):
     l = len(iterable)
     for ndx in range(0, l, n):
@@ -127,19 +128,19 @@ def process_files(session, dir, dest, phpfiles):
     res = upload(session, dir, phpfiles)
     if res:
         success, failure = res
-        print("done.")
-        copy(dir, dest, failure)
+        print("done. %s successful, %d failed." % (len(success), len(failure)))
+        # copy(dir, dest, failure)
         not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
         # download zip
         if len(success) > 0:
             if not download_zip(session, dest):
-                print("download failed. refreshing session...", end='')
-                session = login(args.username, args.password)
-                print("done")
-                if not download_zip(session, dest):
-                    print("still couldn't download. copying originals and continuing")
-                    # copy(dir, dest, phpfiles)
-                    not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
+                # print("download failed. refreshing session...", end='')
+                # session = login(args.username, args.password)
+                # print("done")
+                # if not download_zip(session, dest):
+                print("still couldn't download. copying originals and continuing")
+                # copy(dir, dest, phpfiles)
+            not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
             clear(session)
 
 
