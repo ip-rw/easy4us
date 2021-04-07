@@ -7,8 +7,8 @@ way to upload a directory, so to decode a large webapp is a slow, manual process
 this script should take care of this process for you. the usage should be clear enough.
 
 this is held together with sticky tape and hope, don't be surprised if it fails on big jobs. you should be able to rerun 
-and pick up where you left of. check the code if you'd prefer to copy the original ioncubed files (and the thing should 
-still run, the code is commented)
+and pick up where you left of. check the code if you'd prefer to copy the original ioncubed files and the script should 
+still run, the code to it is commented.
 
 ```
 usage: easy4us
