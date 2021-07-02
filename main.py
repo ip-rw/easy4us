@@ -1,4 +1,5 @@
 import os
+import codecs
 import argparse
 import shutil
 import urllib
@@ -45,17 +46,23 @@ def copy(src, dest, files):
 
 
 def clear(session):
+    print("clearing page", end='')
+    c = 0
     while True:
+        c += 1
         res = session.get(base_url + "/decoder/%s/1" % args.decoder, headers=headers)
         s = bs4.BeautifulSoup(res.content, features="lxml")
         inputs = s.find_all(attrs={"name": "file[]"})
         if len(inputs) < 1:
+            print()
             break
         final = ""
         for i in inputs:
             final += "%s&" % urllib.parse.urlencode({i["name"]: i["value"]})
         session.post(base_url + "/decoder/%s/1" % args.decoder, data=final,
                      headers=dict(headers, **{"Content-Type": "application/x-www-form-urlencoded"}))
+        print("...%d" % c, end='')
+        
         # print("deleted %s files" % len(inputs))
 
 
@@ -86,7 +93,7 @@ def upload(session, dir, files):
     upload = []
     for file in files:
         if file.endswith(".php"):
-            full = open(os.path.join(dir, file))
+            full = codecs.open(os.path.join(dir, file), 'rb')
             upload.append((n, (file, full, "application/x-php")))
     upload.append(("submit", (None, "Decode")))
     if len(upload) > 0:
@@ -130,7 +137,7 @@ def process_files(session, dir, dest, phpfiles):
         success, failure = res
         print("done. %s successful, %d failed." % (len(success), len(failure)))
         # copy(dir, dest, failure)
-        not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
+        not_decoded.extend([os.path.join(dir, f) for f in failure])
         # download zip
         if len(success) > 0:
             if not download_zip(session, dest):
@@ -138,11 +145,10 @@ def process_files(session, dir, dest, phpfiles):
                 # session = login(args.username, args.password)
                 # print("done")
                 # if not download_zip(session, dest):
-                print("still couldn't download. copying originals and continuing")
+                print("couldn't download. copying originals and continuing")
                 # copy(dir, dest, phpfiles)
-            not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
+                not_decoded.extend([os.path.join(dir, f) for f in phpfiles])
             clear(session)
-
 
 if __name__ == '__main__':
     if args.destination == "":
@@ -176,8 +182,8 @@ if __name__ == '__main__':
                     csrc = os.path.join(dest, f)
                     if not os.path.exists(csrc):
                         needed.append(f)
-                    else:
-                        print("%s exists already. skipping." % f)
+                    #else:
+                    #    print("%s exists already. skipping." % f)
                 phpfiles = needed
 
             # upload
