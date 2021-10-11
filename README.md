@@ -10,6 +10,14 @@ this is held together with sticky tape and hope, don't be surprised if it fails 
 and pick up where you left of. check the code if you'd prefer to copy the original ioncubed files and the script should 
 still run, the code to it is commented.
 
+Setup:
+Git clone repo to local folder.
+
+Change into that folder and install the pip requirements
+cd easy4us && pip install -r requirements.txt
+
+Then follow as outlined below to use the command line.
+
 ```
 usage: easy4us
 decode directories with easytoyou.eu
@@ -28,3 +36,6 @@ decode directories with easytoyou.eu
   -w, --overwrite       overwrite
 
 ```
+
+For example:
+`python main.py -u USERNAME -p PASSWORD -s SOURCE -w`
