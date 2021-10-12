@@ -23,9 +23,8 @@ except ImportError:
 current_script_path = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 logname = 'ionsmasher.log'
-print("Script path: ", current_script_path)
-
 output_log_path = os.path.join(current_script_path, logname)
+
 logging.basicConfig(filename=output_log_path,
                     filemode='a',
                     format='%(asctime)s %(name)s %(levelname)s %(message)s',
@@ -35,6 +34,7 @@ logging.basicConfig(filename=output_log_path,
 logging.info("Running IonSmasher!")
 
 logger = logging.getLogger('ionsmasher')
+print("Logfile path: ", output_log_path)
 
 
 ####### End Config ########
@@ -156,6 +156,23 @@ def gray(text):
     print('\033[90m', text, '\033[0m', sep='')
 
 
+# string to remove from all downloaded files
+remove_text = """
+/*
+ * @ https://EasyToYou.eu - IonCube v10 Decoder Online
+ * @ PHP 7.2
+ * @ Decoder version: 1.0.4
+ * @ Release: 01/09/2021
+ */
+"""
+
+
+def replace(string, substitutions):
+    substrings = sorted(substitutions, key=len, reverse=True)
+    regex = re.compile('|'.join(map(re.escape, substrings)))
+    return regex.sub(lambda match: substitutions[match.group(0)], string)
+
+
 #################################
 parser = argparse.ArgumentParser(usage="easy4us", description="decode directories with easytoyou.eu")
 parser.add_argument("-u", "--username", required=False, help="easytoyou.eu username", default=username)
@@ -263,14 +280,19 @@ def download_zip(session, outpath):
         if not os.path.exists(outpath):
             os.makedirs(outpath)
         r = session.get(base_url + "/download.php?id=all", headers=headers)
-        bytes = BytesIO(r.content)
-        zf = zipfile.ZipFile(bytes)
+        zip_bytes = BytesIO(r.content)
+        zf = zipfile.ZipFile(zip_bytes)
         for name in zf.namelist():
             data = zf.read(name)
+            # Let's replace EasyToYou.eu comment from file content
+            substitutions = {remove_text: "\n"}
+            # Convert to string so we can replace
+            data = replace(data.decode('utf-8'), substitutions)
+            # Convert back to bytes so we can write
+            data = bytes(data, 'utf-8')
             dest = os.path.join(outpath, os.path.basename(name))
-            f = open(dest, 'wb+')
-            wrote = f.write(data)
-            f.close()
+            with open(dest, 'wb+') as f:
+                wrote = f.write(data)
             green("wrote %d bytes to %s" % (wrote, dest))
             logging.info("wrote %d bytes to %s" % (wrote, dest))
         zf.close()
@@ -314,6 +336,7 @@ def process_files(session, dir, dest, phpfiles):
 if __name__ == '__main__':
     if args.destination == "":
         args.destination = os.path.basename(args.source) + "_decoded"
+        args.destination = os.path.join(current_script_path, args.destination)
 
     # Let's expand paths from ~
     args.source = os.path.expanduser(args.source)
@@ -376,6 +399,9 @@ if __name__ == '__main__':
                 for f in batch(phpfiles, 25):
                     process_files(session, dir, dest, f)
         green('finished.')
+        print(f'Source folder: {args.source}')
+        print(f'Destination folder: {args.destination}')
+        print("Logfile path: ", output_log_path)
         if not_decoded:
             message = "ioncube files that failed to decode:"
             red(message)
