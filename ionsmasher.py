@@ -334,13 +334,14 @@ def process_files(session, dir, dest, phpfiles):
 
 
 if __name__ == '__main__':
-    if args.destination == "":
-        args.destination = os.path.basename(args.source) + "_decoded"
-        args.destination = os.path.join(current_script_path, args.destination)
-
     # Let's expand paths from ~
     args.source = os.path.expanduser(args.source)
     args.destination = os.path.expanduser(args.destination)
+    
+    if args.destination == "":
+        args.destination = os.path.basename(args.source) + "_decoded"
+        # Let's create the decoded folder in same directory as source but with _decoded
+        args.destination = os.path.join(os.path.abspath(os.path.dirname(args.source)), args.destination)
 
     if args.username == "":
         args.username = username if username else None
