@@ -38,3 +38,5 @@ decode directories with easytoyou.eu
 
 For example:
 `python main.py -u USERNAME -p PASSWORD -s SOURCEDIR -o DESTDIR -w 
+
+Check the site make sure you're using the correct decoder - I don't know how often they update these so any issues with the default check it first.
