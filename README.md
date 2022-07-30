@@ -37,4 +37,4 @@ decode directories with easytoyou.eu
 ```
 
 For example:
-`python main.py -u USERNAME -p PASSWORD -s SOURCE -o OUTDIR -w 
+`python main.py -u USERNAME -p PASSWORD -s SOURCEDIR -o DESTDIR -w 
