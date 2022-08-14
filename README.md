@@ -33,7 +33,7 @@ decode directories with easytoyou.eu
   -o DESTINATION, --destination DESTINATION
                         destination directory
   -d DECODER, --decoder DECODER
-                        decoder (default: ic10php72)
+                        decoder (default: ic11php72)
   -w, --overwrite       overwrite
 
 ```
