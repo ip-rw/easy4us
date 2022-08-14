@@ -14,6 +14,7 @@ Git clone repo to local folder.
 
 Change into that folder and install the pip requirements
 ```
+git clone https://github.com/ip-rw/easy4us
 cd easy4us
 pip install -r requirements.txt
 ```
