@@ -16,7 +16,7 @@ Change into that folder and install the pip requirements
 ```
 cd easy4us
 pip install -r requirements.txt
-``
+```
 Then follow as outlined below to use the command line.
 
 ```
