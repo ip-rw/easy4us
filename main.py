@@ -13,7 +13,7 @@ parser.add_argument("-u", "--username", required=True, help="easytoyou.eu userna
 parser.add_argument("-p", "--password", required=True, help="easytoyou.eu password")
 parser.add_argument("-s", "--source", required=True, help="source directory")
 parser.add_argument("-o", "--destination", required=True, help="destination directory", default="")
-parser.add_argument("-d", "--decoder", help="decoder (default: ic10php72)", default="ic10php72")
+parser.add_argument("-d", "--decoder", help="decoder (default: ic10php72)", default="ic11php72")
 parser.add_argument("-w", "--overwrite", help="overwrite", action='store_true', default=False)
 base_url = "https://easytoyou.eu"
 args = parser.parse_args()
