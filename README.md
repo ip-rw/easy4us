@@ -1,3 +1,8 @@
+NOTICE
+======
+Until somebody can get in touch with the authors of easytoyou.eu and we can get some idea of whether they dislike this sort of automation then I think it's fair to say you run this at your own risk. Please read this issue and ideally add a little concrete information if you're so inclined...
+https://github.com/ip-rw/easy4us/issues/6
+
 easy4us
 =======
 
