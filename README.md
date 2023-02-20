@@ -14,7 +14,7 @@ I know how hard it was to create your script, and as a recompense I'll give you 
 please delete https://github.com/ip-rw/easy4us this crypt has been hell for our service every day lag delay for our clients.
 ```
 
-I offered a new server but they seem happy with what they have. I had a quick look and now they only allow 1 file upload at a time. It would appear if you have larger jobs then your best bet is to contact them directly. Which is a shame because this was so handy...
+I offered a new server but they have just upgraded apparently. I had a quick look and now they only allow 1 file to be uploaded at a time. It would appear if you have larger jobs then your best bet is to contact them directly. Which is a shame because there's some good PHP software out there IonCubed :)
 
 This wont work anymore. You could easily modify things to send one file at a time but you'd just get blocked for flooding. Contact them directly for larger jobs. I'm going to archive this.
 
