@@ -1,7 +1,22 @@
 NOTICE
 ======
-Until somebody can get in touch with the authors of easytoyou.eu and we can get some idea of whether they dislike this sort of automation then I think it's fair to say you run this at your own risk. Please read this issue and ideally add a little concrete information if you're so inclined...
-https://github.com/ip-rw/easy4us/issues/6
+~~Until somebody can get in touch with the authors of easytoyou.eu and we can get some idea of whether they dislike this sort of automation then I think it's fair to say you run this at your own risk. Please read this issue and ideally add a little concrete information if you're so inclined...
+https://github.com/ip-rw/easy4us/issues/6~~
+
+```
+Hi,
+
+unfortunately we had to put an end to this situation, to stop spam ours services.
+now decoding is possible only through the website upload form.
+
+I know how hard it was to create your script, and as a recompense I'll give you 90 days of membership free for your account "step"
+
+please delete https://github.com/ip-rw/easy4us this crypt has been hell for our service every day lag delay for our clients.
+```
+
+I offered a new server but they seem happy with what they have. I had a quick look and now they only allow 1 file upload at a time. It would appear if you have larger jobs then your best bet is to contact them directly. Which is a shame because this was so handy...
+
+This wont work anymore. You could easily modify things to send one file at a time but you'd just get blocked for flooding. Contact them directly for larger jobs. I'm going to archive this.
 
 easy4us
 =======
